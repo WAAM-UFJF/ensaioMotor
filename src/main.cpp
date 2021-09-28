@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <Wire.h> 
 #include <Adafruit_INA219.h>
+#include <time.h>
+#include <ArduinoJson.h>
 
 #define SDA 21
 #define SCL 22
@@ -23,6 +25,9 @@ boolean Direcao;
 
 // Definição do sensor de corrente e tensão.
 Adafruit_INA219 ina219_0 (0x40);
+
+// Definições JSON
+DynamicJsonDocument doc(1024);
 
 void calculapulso()
 {
@@ -75,6 +80,8 @@ void setup() {
     while (1) { delay(10); }
   } 
 
+  
+
   // Inicializa o encoder
   EncoderInit();
 }
@@ -86,15 +93,17 @@ void loop() {
   float loadvoltage = 0;   
   float power_mW = 0;
 
-  ledcWrite(ledChannel, 255);
-  Serial.print("DutyCycle: 255 \n");
+
 
   shuntvoltage = ina219_0.getShuntVoltage_mV();    
   busvoltage = ina219_0.getBusVoltage_V();         
   current_mA = ina219_0.getCurrent_mA();           
   power_mW = ina219_0.getPower_mW();               
   loadvoltage = busvoltage + (shuntvoltage / 1000);  
+  ledcWrite(ledChannel, 255);
 
+  /*
+  Serial.print("DutyCycle: 255 \n");
   Serial.print("Tensão de Entrada:   "); Serial.print(busvoltage); Serial.println(" V"); 
   Serial.print("Tensão no shunt: "); Serial.print(shuntvoltage); Serial.println(" mV");  
   Serial.print("Tensão da Carga:  "); Serial.print(loadvoltage); Serial.println(" V");   
@@ -108,6 +117,19 @@ void loop() {
     Serial.println("Sentido: Horário");
   }
   Serial.println("");
+
+  */
+
+  doc["DutyCycle"] = 255;
+  doc["TEntrada"] = busvoltage;
+  doc["TShunt"] = shuntvoltage;
+  doc["TCarga"] = loadvoltage;
+  doc["Corrente"] = current_mA;
+  doc["Potencia"] = power_mW;
+
+  serializeJson(doc, Serial);
+
+
 
   delay(5000);
 
