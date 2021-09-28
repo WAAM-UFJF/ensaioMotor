@@ -27,7 +27,7 @@ boolean Direcao;
 Adafruit_INA219 ina219_0 (0x40);
 
 // Definições JSON
-DynamicJsonDocument doc(1024);
+DynamicJsonDocument doc(512 );
 
 void calculapulso()
 {

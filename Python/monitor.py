@@ -4,7 +4,29 @@ import sys
 import json
 import pandas as pd
 from plotTempoReal import plotTempoReal
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
+x = []
+y = []
+
+def animate(i):
+    text = ser.readline().decode("utf-8")
+    if(text != ""):
+        # tstart = time()
+        data = json.loads(text)
+        data["Tempo"] = time() - start
+        print(data)
+        x.append(data["Tempo"])
+        y.append(data["Corrente"])
+        plt.cla()
+        plt.plot(x, y, label = 'Corrente')
+        plt.legend(loc='upper right', fontsize = 20)
+        # tfinal = time()
+        # print(f'Tempo total {tfinal - tstart}')
+        plt.tight_layout()
+        
+        
 
 COM = 'COM6'# /dev/ttyACM0 (Linux)
 BAUD = 115200
@@ -22,13 +44,12 @@ else:
 	monitor= False
 
 start = time()
-graficos = plotTempoReal()
-while True:
-    text = ser.readline().decode("utf-8")
-    if(text != ""):
-        data = json.loads(text)
-        data["Tempo"] = time() - start
-        print(data)
-        print(type(data["Corrente"]))
-        graficos.plot(data)
-        graficos.ani.resume()
+# graficos = plotTempoReal()
+
+
+
+plt.figure(figsize = (2560/96, 1080/96))
+plt.style.use('fivethirtyeight')
+ani = FuncAnimation(plt.gcf(), animate, interval = 100)
+plt.show()
+
