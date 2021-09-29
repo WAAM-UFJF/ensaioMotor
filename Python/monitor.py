@@ -12,19 +12,23 @@ y = []
 
 def animate(i):
     text = ser.readline().decode("utf-8")
+    print(text)
     if(text != ""):
-        # tstart = time()
-        data = json.loads(text)
-        data["Tempo"] = time() - start
-        print(data)
-        x.append(data["Tempo"])
-        y.append(data["Corrente"])
-        plt.cla()
-        plt.plot(x, y, label = 'Corrente')
-        plt.legend(loc='upper right', fontsize = 20)
-        # tfinal = time()
-        # print(f'Tempo total {tfinal - tstart}')
-        plt.tight_layout()
+        try:
+            data = eval(text)
+            data["Tempo"] = time() - start
+            print(data)
+            x.append(data["Tempo"])
+            y.append(data["Corrente"])
+            plt.cla()
+            plt.plot(x, y, label = 'Corrente')
+            plt.legend(loc='upper right', fontsize = 20)
+            # tfinal = time()
+            # print(f'Tempo total {tfinal - tstart}')
+            plt.tight_layout()
+        except:
+            print("Erro")
+        
         
         
 

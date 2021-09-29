@@ -51,7 +51,7 @@ void calculapulso()
 
 void EncoderInit()
 {
-  Serial.println("Iniciei o Encoder");
+  //Serial.println("Iniciei o Encoder");
   pinMode(Encoder_C2, INPUT);
   attachInterrupt(14, calculapulso, CHANGE);
 }
@@ -80,8 +80,8 @@ void setup() {
     while (1) { delay(10); }
   } 
 
-  
-
+  //Serial.print("Programa Iniciado!");
+  delay(10000);
   // Inicializa o encoder
   EncoderInit();
 }
@@ -131,7 +131,7 @@ void loop() {
 
 
 
-  delay(5000);
+  delay(100);
 
   //  // Aumenta a velocidade de rotação do motor
   // for(int dutyCycle = 200; dutyCycle <= (pow(2, resolution) - 1); dutyCycle++){   
