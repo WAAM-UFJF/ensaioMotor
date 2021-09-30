@@ -29,6 +29,7 @@ Adafruit_INA219 ina219_0 (0x40);
 // Definições JSON
 DynamicJsonDocument doc(512 );
 
+
 void calculapulso()
 {
   int Lstate = digitalRead(Encoder_C1);
@@ -79,7 +80,7 @@ void setup() {
     Serial.println("Falha ao encontrar o INA219");
     while (1) { delay(10); }
   } 
-  
+  ina219_0.setCalibration_16V_400mA();
   // Inicializa o encoder
   EncoderInit();
 }
@@ -118,18 +119,19 @@ void loop() {
 
   */
 
-  doc["DutyCycle"] = 255;
-  doc["TEntrada"] = busvoltage;
-  doc["TShunt"] = shuntvoltage;
-  doc["TCarga"] = loadvoltage;
+  // doc["DutyCycle"] = 255;
+  // doc["TEntrada"] = busvoltage;
+  // doc["TShunt"] = shuntvoltage;
+  // doc["TCarga"] = loadvoltage;
   doc["Corrente"] = current_mA;
-  doc["Potencia"] = power_mW;
+  // doc["Potencia"] = power_mW;
+  doc["Tempo"] = millis();
 
   serializeJson(doc, Serial);
 
 
 
-  delay(1000);
+  delay(150);
 
   //  // Aumenta a velocidade de rotação do motor
   // for(int dutyCycle = 200; dutyCycle <= (pow(2, resolution) - 1); dutyCycle++){   

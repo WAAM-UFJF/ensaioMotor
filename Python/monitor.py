@@ -25,11 +25,8 @@
 
 
 import serial
-from time import sleep, time
+from time import sleep
 import sys
-import json
-import pandas as pd
-from plotTempoReal import plotTempoReal
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
@@ -42,7 +39,7 @@ def animate(i):
     if(text != ""):
         try:
             data = eval(text)
-            data["Tempo"] = time() - start
+            # data["Tempo"] = time() - start
             print(data)
             x.append(data["Tempo"])
             y.append(data["Corrente"])
@@ -53,7 +50,18 @@ def animate(i):
             # print(f'Tempo total {tfinal - tstart}')
             plt.tight_layout()
         except:
-            print("Erro")
+            data = text.split('}')
+            data.pop()
+            data = [data[i] + '}' for i in range(len(data))]
+            for dicts in data:
+                dicts = eval(dicts)
+                #dicts["Tempo"] = time() - start
+                x.append(dicts["Tempo"])
+                y.append(dicts["Corrente"])
+                plt.cla()
+                plt.plot(x, y, label = 'Corrente')
+                plt.legend(loc='upper right', fontsize = 20)
+
         
         
         
@@ -73,12 +81,8 @@ if("-m" in sys.argv or "--monitor" in sys.argv):
 else:
 	monitor= False
 
-start = time()
-# graficos = plotTempoReal()
-
-
 
 plt.figure(figsize = (2560/96, 1080/96))
 plt.style.use('fivethirtyeight')
-ani = FuncAnimation(plt.gcf(), animate, interval = 1000)
+ani = FuncAnimation(plt.gcf(), animate, interval = 150)
 plt.show()
