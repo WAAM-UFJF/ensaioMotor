@@ -79,9 +79,7 @@ void setup() {
     Serial.println("Falha ao encontrar o INA219");
     while (1) { delay(10); }
   } 
-
-  //Serial.print("Programa Iniciado!");
-  delay(10000);
+  
   // Inicializa o encoder
   EncoderInit();
 }
@@ -131,7 +129,7 @@ void loop() {
 
 
 
-  delay(100);
+  delay(1000);
 
   //  // Aumenta a velocidade de rotação do motor
   // for(int dutyCycle = 200; dutyCycle <= (pow(2, resolution) - 1); dutyCycle++){   
