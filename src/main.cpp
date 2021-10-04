@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <encoder.h>
 #include <Wire.h> 
 #include <Adafruit_INA219.h>
 #include <time.h>
@@ -16,47 +17,12 @@ const int freq = 5000;        // Define a frequencia a ser utilizada
 const int ledChannel = 0;
 int resolution = 8;           // Define a resolução que será utilizada no PWM.
 
-// Definições do Encoder
-const int Encoder_C1 = 12;
-const int Encoder_C2 = 14;
-byte Encoder_C1Last;
-int duracao;
-boolean Direcao;
 
 // Definição do sensor de corrente e tensão.
 Adafruit_INA219 ina219_0 (0x40);
 
 // Definições JSON
-DynamicJsonDocument doc(512 );
-
-
-void calculapulso()
-{
-  int Lstate = digitalRead(Encoder_C1);
-  if ((Encoder_C1Last == LOW) && Lstate == HIGH)
-  {
-    int val = digitalRead(Encoder_C2);
-    if (val == LOW && Direcao)
-    {
-      Direcao = false; //Reverse
-    }
-    else if (val == HIGH && !Direcao)
-    {
-      Direcao = true;  //Forward
-    }
-  }
-  Encoder_C1Last = Lstate;
-  if (!Direcao)  duracao++;
-  else  duracao--;
-}
-
-void EncoderInit()
-{
-  //Serial.println("Iniciei o Encoder");
-  pinMode(Encoder_C2, INPUT);
-  attachInterrupt(14, calculapulso, CHANGE);
-}
-
+DynamicJsonDocument doc(32);
 
 void setup() {
   Serial.begin(115200);
@@ -70,6 +36,7 @@ void setup() {
 
   // Configura o LED PWM
   ledcSetup(ledChannel, freq, resolution);  
+  ledcWrite(ledChannel, 255);
 
   // Define como output os pinos que definem o sentido de rotação do motor
   digitalWrite(sentidoMotor1, LOW);
@@ -85,97 +52,29 @@ void setup() {
   EncoderInit();
 }
 
+
+
 void loop() {
+  float corrente[50];
+  float tempo[50];
+  // Direção == False -> Anti-horario    ;    Direção == True  ->  Horário
   float shuntvoltage = 0;  
   float busvoltage = 0;    
   float current_mA = 0;    
   float loadvoltage = 0;   
   float power_mW = 0;
 
-
-
   shuntvoltage = ina219_0.getShuntVoltage_mV();    
   busvoltage = ina219_0.getBusVoltage_V();         
   current_mA = ina219_0.getCurrent_mA();           
   power_mW = ina219_0.getPower_mW();               
   loadvoltage = busvoltage + (shuntvoltage / 1000);  
-  ledcWrite(ledChannel, 255);
-
-  /*
-  Serial.print("DutyCycle: 255 \n");
-  Serial.print("Tensão de Entrada:   "); Serial.print(busvoltage); Serial.println(" V"); 
-  Serial.print("Tensão no shunt: "); Serial.print(shuntvoltage); Serial.println(" mV");  
-  Serial.print("Tensão da Carga:  "); Serial.print(loadvoltage); Serial.println(" V");   
-  Serial.print("Corrente:       "); Serial.print(current_mA); Serial.println(" mA");     
-  Serial.print("Potência:         "); Serial.print(power_mW); Serial.println(" mW");     
   
-  if(Direcao == false){
-    Serial.println("Sentido: Anti-horário");
+
+  for(int i=0; i<50 ; i++){
+    corrente[i] = ina219_0.getCurrent_mA();
+    tempo[i] = millis();
   }
-  else{
-    Serial.println("Sentido: Horário");
-  }
-  Serial.println("");
 
-  */
-
-  // doc["DutyCycle"] = 255;
-  // doc["TEntrada"] = busvoltage;
-  // doc["TShunt"] = shuntvoltage;
-  // doc["TCarga"] = loadvoltage;
-  doc["Corrente"] = current_mA;
-  // doc["Potencia"] = power_mW;
-  doc["Tempo"] = millis();
-
-  serializeJson(doc, Serial);
-
-
-
-  delay(150);
-
-  //  // Aumenta a velocidade de rotação do motor
-  // for(int dutyCycle = 200; dutyCycle <= (pow(2, resolution) - 1); dutyCycle++){   
-  //   // Aumenta a velocidade de rotação do motor através do aumento do dutycycle do PWM
-  //   ledcWrite(ledChannel, dutyCycle);
-  //   Serial.print("DutyCycle: ");
-  //   Serial.println(dutyCycle);
-
-  //   shuntvoltage = ina219_0.getShuntVoltage_mV();    
-  //   busvoltage = ina219_0.getBusVoltage_V();         
-  //   current_mA = ina219_0.getCurrent_mA();           
-  //   power_mW = ina219_0.getPower_mW();               
-  //   loadvoltage = busvoltage + (shuntvoltage / 1000);
-
-  //   Serial.print("Tensão de Entrada:   "); Serial.print(busvoltage); Serial.println(" V"); 
-  //   Serial.print("Tensão no shunt: "); Serial.print(shuntvoltage); Serial.println(" mV");  
-  //   Serial.print("Tensão da Carga:  "); Serial.print(loadvoltage); Serial.println(" V");   
-  //   Serial.print("Corrente:       "); Serial.print(current_mA); Serial.println(" mA");     
-  //   Serial.print("Potência:         "); Serial.print(power_mW); Serial.println(" mW");     
-  //   Serial.println("");
-  //   delay(5000);
-  // }
-
-  // // Diminui a valocidade de rotação do motor
-  // for(int dutyCycle = (pow(2, resolution) - 1); dutyCycle >= 0; dutyCycle--){
-  //   // Diminui a velocidade de rotação do motor através do decremento do dutycycle do PWM
-  //   ledcWrite(ledChannel, dutyCycle);
-  //   Serial.print("DutyCycle: ");
-  //   Serial.println(dutyCycle);
-
-  //   shuntvoltage = ina219_0.getShuntVoltage_mV();    
-  //   busvoltage = ina219_0.getBusVoltage_V();         
-  //   current_mA = ina219_0.getCurrent_mA();           
-  //   power_mW = ina219_0.getPower_mW();               
-  //   loadvoltage = busvoltage + (shuntvoltage / 1000);
-    
-  //   Serial.print("Tensão de Entrada:   "); Serial.print(busvoltage); Serial.println(" V"); 
-  //   Serial.print("Tensão no shunt: "); Serial.print(shuntvoltage); Serial.println(" mV");  
-  //   Serial.print("Tensão da Carga:  "); Serial.print(loadvoltage); Serial.println(" V");   
-  //   Serial.print("Corrente:       "); Serial.print(current_mA); Serial.println(" mA");     
-  //   Serial.print("Potência:         "); Serial.print(power_mW); Serial.println(" mW");     
-  //   Serial.println("");
-  //   delay(500);
-  // }
-
+  Serial.println(corrente[20]);
 }
-
