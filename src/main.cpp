@@ -55,26 +55,23 @@ void setup() {
 
 
 void loop() {
-  float corrente[50];
-  float tempo[50];
-  // Direção == False -> Anti-horario    ;    Direção == True  ->  Horário
-  float shuntvoltage = 0;  
-  float busvoltage = 0;    
-  float current_mA = 0;    
-  float loadvoltage = 0;   
-  float power_mW = 0;
+  // float corrente[50];
+  // float tempo[50];
+  // // Direção == False -> Anti-horario    ;    Direção == True  ->  Horário
+  // float shuntvoltage = 0;  
+  // float busvoltage = 0;    
+  // float current_mA = 0;    
+  // float loadvoltage = 0;   
+  // float power_mW = 0;
 
-  shuntvoltage = ina219_0.getShuntVoltage_mV();    
-  busvoltage = ina219_0.getBusVoltage_V();         
-  current_mA = ina219_0.getCurrent_mA();           
-  power_mW = ina219_0.getPower_mW();               
-  loadvoltage = busvoltage + (shuntvoltage / 1000);  
-  
+  // shuntvoltage = ina219_0.getShuntVoltage_mV();    
+  // busvoltage = ina219_0.getBusVoltage_V();         
+  // current_mA = ina219_0.getCurrent_mA();           
+  // power_mW = ina219_0.getPower_mW();               
+  // loadvoltage = busvoltage + (shuntvoltage / 1000);  
 
-  for(int i=0; i<50 ; i++){
-    corrente[i] = ina219_0.getCurrent_mA();
-    tempo[i] = millis();
-  }
-
-  Serial.println(corrente[20]);
+  Serial.print(millis());
+  Serial.print(";");
+  Serial.println(ina219_0.getCurrent_mA());
+  delay(3);
 }
