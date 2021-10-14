@@ -55,8 +55,13 @@ void setup() {
 
 
 void loop() {
-  Serial.print(millis());
+  float corrente = 0, tempo = 0;
+  for(int i = 0; i < 5; i++){
+    corrente = corrente + ina219_0.getCurrent_mA();
+    tempo = tempo + millis();
+  }
+  Serial.print(tempo/5);
   Serial.print(";");
-  Serial.println(ina219_0.getCurrent_mA());
+  Serial.println(corrente/5);
   delay(3);
 }

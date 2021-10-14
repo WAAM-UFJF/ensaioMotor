@@ -6,6 +6,7 @@ from matplotlib.animation import FuncAnimation
 
 x = []
 y = []
+erros = [0]
 
 # def animate(i):
 #     text = ser.readline().decode("utf-8")
@@ -36,14 +37,20 @@ y = []
 def animate(i):
     text = ser.readline().decode("utf-8")
     if text != "":
-        text= text.split('\r\n')
-        tempo, corrente = text[0].split(';')
-        x.append(float(tempo))
-        y.append(float(corrente))
-        plt.cla()
-        plt.plot(x, y, label = 'Corrente')
-        plt.legend(loc='upper right', fontsize = 20)
-        plt.tight_layout()
+        try:
+            print(text)
+            text= text.split('\r\n')
+            tempo, corrente = text[0].split(';')
+            x.append(float(tempo))
+            y.append(float(corrente))
+            plt.cla()
+            plt.plot(x, y, label = 'Corrente')
+            plt.legend(loc='upper right', fontsize = 20)
+            plt.tight_layout()
+        except:
+            print(f'Erro ao tentar atualizar dados.')
+            erros[0] += 1
+            print(f'Numero de erros: {erros}')
 
         
         
