@@ -24,6 +24,9 @@ Adafruit_INA219 ina219_0 (0x40);
 // Definições JSON
 DynamicJsonDocument doc(32);
 
+// Define o valor de amostras para a media movel
+int N;
+
 void setup() {
   Serial.begin(115200);
   pinMode(sentidoMotor1, OUTPUT);
