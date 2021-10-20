@@ -1,41 +1,26 @@
 import serial
-from time import sleep
+from time import time, sleep
 import sys
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from plotTempoReal import plotTempoReal
 
 x = []
 y = []
 erros = [0]
+atualizaGrafico = [0]
 
 def animate(i):
-    # TrataDados(ser)
-
-    try:
-        text = ser.read(ser.inWaiting())
-        print(text)
-        if text != "":
-            try:
-                #print(text)
-                text= text.split('\r\n')
-                tempo, corrente = text[0].split(';')
-                x.append(float(tempo))
-                y.append(float(corrente))
-                plt.cla()
-                plt.plot(x, y, label = 'Corrente')
-                plt.legend(loc='upper right', fontsize = 20)
-                plt.tight_layout()
-            except:
-                #print(text)
-                print(f'Erro ao tentar atualizar dados.')
-                erros[0] += 1
-                print(f'Numero de erros: {erros}')
-    except:
-        print("Erro ao receber dados!")
-
-        
-        
-        
+    tempoAux, correnteAux = graph.trataDados(ser)
+    x.extend(tempoAux)
+    y.extend(correnteAux)
+    if time() - atualizaGrafico[0] > 1:
+        atualizaGrafico[0] = time()
+        graph.plot(x,y)
+    if len(x) > 10000:
+        x.clear()
+        y.clear()
+      
 
 COM = 'COM6'# /dev/ttyACM0 (Linux)
 BAUD = 115200
@@ -52,8 +37,10 @@ if("-m" in sys.argv or "--monitor" in sys.argv):
 else:
 	monitor= False
 
-plt.figure(figsize = (2560/96, 1080/96))
+plt.figure(figsize = (1920/96, 1080/96))
+plt.xlabel("Tempo [ms]")
+plt.ylabel("Corrente [mA]")
 plt.style.use('fivethirtyeight')
-ani = FuncAnimation(plt.gcf(), animate, interval = .01)
+graph = plotTempoReal()
+ani = FuncAnimation(plt.gcf(), animate, interval = 200)
 plt.show()
-

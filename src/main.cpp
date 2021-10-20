@@ -25,7 +25,8 @@ Adafruit_INA219 ina219_0 (0x40);
 DynamicJsonDocument doc(32);
 
 // Define o valor de amostras para a media movel
-int N;
+int N = 16;
+float n = 1/N;
 
 void setup() {
   Serial.begin(115200);
