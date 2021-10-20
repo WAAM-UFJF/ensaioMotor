@@ -25,8 +25,10 @@ Adafruit_INA219 ina219_0 (0x40);
 DynamicJsonDocument doc(32);
 
 // Define o valor de amostras para a media movel
-int N = 16;
-float n = 1/N;
+int N = 128;
+float n = 1.0/N;
+float mediaMovel[128];
+int contador=0;
 
 void setup() {
   Serial.begin(115200);
@@ -59,13 +61,31 @@ void setup() {
 
 
 void loop() {
-  float corrente = 0, tempo = 0;
+  float corrente = 0, tempo = 0, correnteFiltrada = 0;
+  contador++;
   for(int i = 0; i < 5; i++){
     corrente = corrente + ina219_0.getCurrent_mA();
     tempo = tempo + millis();
   }
-  Serial.print(tempo/5);
+
+  tempo = tempo/5;
+  corrente = corrente/5;
+  mediaMovel[(contador-1)%N] = corrente;
+
+  if(contador < N){
+    for(int i=0; i<contador+1;i++){
+      correnteFiltrada += mediaMovel[i];
+    }
+    correnteFiltrada = correnteFiltrada/contador;
+  }
+  else{
+    for(int i=0; i<N; i++){
+      correnteFiltrada += mediaMovel[i];
+    }
+    correnteFiltrada = correnteFiltrada*n;    
+  }
+  Serial.print(tempo);
   Serial.print(";");
-  Serial.println(corrente/5);
+  Serial.println(correnteFiltrada);
   delay(3);
 }
