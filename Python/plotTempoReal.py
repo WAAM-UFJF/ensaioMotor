@@ -12,6 +12,8 @@ class plotTempoReal():
         :param data: dicionario com os dados a serem plotados
         """
         print("Plot em tempo real inicializado")
+        self._tamJanela = 10
+        self._tempo = [0.01*i for i in range(0,1001)]
 
     
     def plot(self, tempo, corrente):
@@ -20,8 +22,20 @@ class plotTempoReal():
         :param tempo: lista com os valores de tempo
         :param corrente: lista com os valores de corrente
         """
-        try:
-            plt.cla()
+        plt.cla()
+        if len(corrente) < len(self._tempo):
+            try:
+                plt.plot(self._tempo[:len(corrente)], corrente, linewidth = 3, color = 'tab:blue', label = "Corrente")
+            except:
+                print("Erro ao tentar realizar o plot com dados incompletos!")
+        else:
+            try:
+                plt.plot(self._tempo, corrente, linewidth = 3, color = 'tab:blue', label = "Corrente")
+            except:
+                print("Erro ao tentar realizar o plot com dados completos!")
+        try:            
+            plt.xlim([-1*self._tamJanela, 0])
+            plt.xticks([i for i in range(-1*self._tamJanela, 1)])            
             plt.xlabel("Tempo [ms]")
             plt.ylabel("Corrente [mA]")
             plt.plot(tempo, corrente, label = 'Corrente')
