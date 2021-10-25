@@ -5,21 +5,16 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from plotTempoReal import plotTempoReal
 
-x = []
-y = []
-erros = [0]
+a = [0]
 atualizaGrafico = [0]
 
 def animate(i):
-    tempoAux, correnteAux = graph.trataDados(ser)
-    x.extend(tempoAux)
-    y.extend(correnteAux)
-    if time() - atualizaGrafico[0] > 1:
-        atualizaGrafico[0] = time()
-        graph.plot(x,y)
-    if len(x) > 10000:
-        x.clear()
-        y.clear()
+    if a[0] == 0:
+        a[0] = 1
+        velocidade = []
+        corrente = []
+    velocidade, corrente = graph.trataDados(ser, velocidade, corrente)
+    graph.plot(velocidade,corrente)
       
 
 COM = 'COM6'# /dev/ttyACM0 (Linux)
