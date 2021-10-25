@@ -67,9 +67,10 @@ void loop() {
     corrente = corrente + ina219_0.getCurrent_mA();
     tempo = tempo + millis();
   }
-
   tempo = tempo/5;
   corrente = corrente/5;
+
+
   mediaMovel[(contador-1)%N] = corrente;
 
   if(contador < N){
