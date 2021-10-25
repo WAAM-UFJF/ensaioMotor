@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 
 
 class plotTempoReal():
@@ -9,7 +8,6 @@ class plotTempoReal():
     def __init__(self):
         """
         Construtor da classe plotTempoReal
-        :param data: dicionario com os dados a serem plotados
         """
         print("Plot em tempo real inicializado")
         self._tamJanela = 10
@@ -50,7 +48,7 @@ class plotTempoReal():
         :param ser: variavel de conexão, do tipo serial.serial
         """
         self._corrente = []
-        self._tempo = []
+        self._velocidade = []
         dados = ser.read(ser.inWaiting()).decode('utf-8')
         if dados != "":
             try:
@@ -59,16 +57,19 @@ class plotTempoReal():
                 dados.pop(0)
                 try:
                     for data in dados:
-                        self._tempoAux, self._correnteAux = data.split(';')
+                        self._velocidadeAux, self._correnteAux = data.split(';')
                         self._corrente.append(float(self._correnteAux))
-                        self._tempo.append(float(self._tempoAux))
+                        self._velocidade.append(float(self._velocidadeAux))
+                        if len(self._velocidade) > len(self._tempo):
+                            self._corrente.pop(0)
+                            self._velocidade.pop(0)
                 except:
                     print("Falha ao separar dados!")
                     print(f'Dados recebidos: {dados}')                    
             except:
                 print("Erro ao tentar receber dados!")
 
-        return self._tempo, self._corrente
+        return self._velocidade, self._corrente
 
     
 
