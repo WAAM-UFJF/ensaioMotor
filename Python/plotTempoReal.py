@@ -42,13 +42,15 @@ class plotTempoReal():
         except:
             print("Erro ao tentar traçar o grafico!")
         
-    def trataDados(self, ser):
+    def trataDados(self, ser, velocidade, corrente):
         """
         Método que reliza o recebimento e tratamento dos dados
         :param ser: variavel de conexão, do tipo serial.serial
+        :param velocidade: vetor com os valores de velocidade
+        :param corrente: veotr com os valores de corrente
         """
-        self._corrente = []
-        self._velocidade = []
+        self._corrente = corrente
+        self._velocidade = velocidade
         dados = ser.read(ser.inWaiting()).decode('utf-8')
         if dados != "":
             try:
