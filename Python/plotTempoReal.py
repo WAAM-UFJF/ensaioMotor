@@ -28,7 +28,7 @@ class plotTempoReal():
                 print("Erro ao tentar realizar o plot com dados incompletos!")
         else:
             try:
-                plt.plot(self._tempo, list(reversed(corrente)), linewidth = 3, color = 'tab:blue')
+                plt.plot(self._tempo, list(reversed(corrente)), linewidth = 3, color = 'tab:blue', label = "Corrente")
             except:
                 print("Erro ao tentar realizar o plot com dados completos!")
         try:            
@@ -36,7 +36,6 @@ class plotTempoReal():
             plt.xticks([i for i in range(-1*self._tamJanela, 1)])            
             plt.xlabel("Tempo [ms]")
             plt.ylabel("Corrente [mA]")
-            plt.plot(tempo, corrente, label = 'Corrente')
             plt.legend(loc='upper right', fontsize = 20)
             plt.tight_layout()
         except:
