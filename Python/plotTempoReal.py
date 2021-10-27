@@ -11,7 +11,7 @@ class plotTempoReal():
         """
         print("Plot em tempo real inicializado")
         self._tamJanela = 20
-        self._tempo = [-0.01*i for i in range(0,100*self._tamJanela + 1)]
+        self._tempo = [0.01*i for i in range(0,100*self._tamJanela + 1)]
 
     
     def plot(self, tempo, corrente):
@@ -23,20 +23,19 @@ class plotTempoReal():
         plt.cla()
         if len(corrente) < len(self._tempo):
             try:
-                plt.plot(self._tempo[:len(corrente)], list(reversed(corrente)), linewidth = 3, color = 'tab:blue', label = "Corrente")
+                plt.plot(self._tempo[:len(corrente)], corrente, linewidth = 3, color = 'tab:blue', label = "Corrente")
             except:
                 print("Erro ao tentar realizar o plot com dados incompletos!")
         else:
             try:
-                plt.plot(self._tempo, list(reversed(corrente)), linewidth = 3, color = 'tab:blue')
+                plt.plot(self._tempo, corrente, linewidth = 3, color = 'tab:blue', label = "Corrente")
             except:
                 print("Erro ao tentar realizar o plot com dados completos!")
         try:            
-            plt.xlim([-1*self._tamJanela, 0])
-            plt.xticks([i for i in range(-1*self._tamJanela, 1)])            
+            plt.xlim([0, self._tamJanela])
+            plt.xticks([i for i in range(1, self._tamJanela)])            
             plt.xlabel("Tempo [ms]")
             plt.ylabel("Corrente [mA]")
-            plt.plot(tempo, corrente, label = 'Corrente')
             plt.legend(loc='upper right', fontsize = 20)
             plt.tight_layout()
         except:
@@ -53,26 +52,27 @@ class plotTempoReal():
         self._velocidade = velocidade
         try:
             dados = ser.read(ser.inWaiting()).decode('utf-8')
+            if dados != "":
+                try:
+                    dados = dados.split('\r\n')
+                    dados.pop()
+                    dados.pop(0)
+                    try:
+                        for data in dados:
+                            self._velocidadeAux, self._correnteAux = data.split(';')
+                            self._corrente.append(float(self._correnteAux))
+                            self._velocidade.append(float(self._velocidadeAux))
+                            if len(self._velocidade) > len(self._tempo):
+                                self._corrente.pop(0)
+                                self._velocidade.pop(0)
+                    except:
+                        print("Falha ao separar dados!")
+                        print(f'Dados recebidos: {dados}')                    
+                except:
+                    print("Erro ao tentar receber dados!")
         except:
             print("Erro ao decodificar os dados!")
-        if dados != "":
-            try:
-                dados = dados.split('\r\n')
-                dados.pop()
-                dados.pop(0)
-                try:
-                    for data in dados:
-                        self._velocidadeAux, self._correnteAux = data.split(';')
-                        self._corrente.append(float(self._correnteAux))
-                        self._velocidade.append(float(self._velocidadeAux))
-                        if len(self._velocidade) > len(self._tempo):
-                            self._corrente.pop(0)
-                            self._velocidade.pop(0)
-                except:
-                    print("Falha ao separar dados!")
-                    print(f'Dados recebidos: {dados}')                    
-            except:
-                print("Erro ao tentar receber dados!")
+        
 
         return self._velocidade, self._corrente
 
