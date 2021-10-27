@@ -11,7 +11,7 @@ class plotTempoReal():
         """
         print("Plot em tempo real inicializado")
         self._tamJanela = 10
-        self._tempo = [-0.01*i for i in range(0,1001)]
+        self._tempo = [-0.01*i for i in range(0,100*self._tamJanela + 1)]
 
     
     def plot(self, tempo, corrente):

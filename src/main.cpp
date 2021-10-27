@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <encoder.h>
-#include <alteraPWM.h>
+#include <confpwm.h>
 #include <Wire.h> 
 #include <Adafruit_INA219.h>
 #include <time.h>
@@ -10,13 +10,11 @@
 #define SCL 22
 
 // Definições do PWM e Ponte H
-const int led  = 16;          // Define a porta de saída do sinal PWM.
+
 const int sentidoMotor1 = 2;  // Porta para definir o sentido de rotação 1.
 const int sentidoMotor2 = 0;  // Porta para definir o sentido de rotação 2.
 
-const int freq = 5000;        // Define a frequencia a ser utilizada
-const int ledChannel = 0;
-int resolution = 8;           // Define a resolução que será utilizada no PWM.
+
 
 
 // Definição do sensor de corrente e tensão.
@@ -35,15 +33,6 @@ void setup() {
   Serial.begin(115200);
   pinMode(sentidoMotor1, OUTPUT);
   pinMode(sentidoMotor2, OUTPUT);
-  pinMode(led, OUTPUT);
-  
-
-  // Atribui o canal ao GPIO que será controlado
-  ledcAttachPin(led, ledChannel);
-
-  // Configura o LED PWM
-  ledcSetup(ledChannel, freq, resolution);  
-  ledcWrite(ledChannel, 154);
 
   // Define como output os pinos que definem o sentido de rotação do motor
   digitalWrite(sentidoMotor1, LOW);
@@ -56,11 +45,14 @@ void setup() {
   } 
   ina219_0.setCalibration_16V_400mA();
 
+  // Inicializa o PWM do motor com D = 0.6
+  inicializaPWM();
+
   // Inicializa o encoder
   EncoderInit();
 
   // Altera PWM
-  alteraPWM();
+  verificaPWM();
 }
 
 
