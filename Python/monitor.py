@@ -8,12 +8,17 @@ from plotTempoReal import plotTempoReal
 a = [0]
 atualizaGrafico = [0]
 
+
 def animate(i):
     if a[0] == 0:
+        print("Entrei no If")
         a[0] = 1
+        global velocidade
+        global corrente
         velocidade = []
         corrente = []
     velocidade, corrente = graph.trataDados(ser, velocidade, corrente)
+    print(f'Corrente = {corrente}')
     graph.plot(velocidade,corrente)
       
 

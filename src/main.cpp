@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <encoder.h>
+#include <alteraPWM.h>
 #include <Wire.h> 
 #include <Adafruit_INA219.h>
 #include <time.h>
@@ -42,7 +43,7 @@ void setup() {
 
   // Configura o LED PWM
   ledcSetup(ledChannel, freq, resolution);  
-  ledcWrite(ledChannel, 255);
+  ledcWrite(ledChannel, 154);
 
   // Define como output os pinos que definem o sentido de rotação do motor
   digitalWrite(sentidoMotor1, LOW);
@@ -54,8 +55,12 @@ void setup() {
     while (1) { delay(10); }
   } 
   ina219_0.setCalibration_16V_400mA();
+
   // Inicializa o encoder
   EncoderInit();
+
+  // Altera PWM
+  alteraPWM();
 }
 
 
