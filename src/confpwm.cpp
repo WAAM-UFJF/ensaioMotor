@@ -11,7 +11,6 @@ int resolution = 8;           // Define a resolução que será utilizada no PWM
 
 void alteraPWM(){
     ledcWrite(motorChannel, 180);
-    Serial.println("PWM ATUALIZADO!!!");
 }
 
 void verificaPWM()

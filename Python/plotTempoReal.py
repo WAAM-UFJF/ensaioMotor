@@ -10,7 +10,7 @@ class plotTempoReal():
         Construtor da classe plotTempoReal
         """
         print("Plot em tempo real inicializado")
-        self._tamJanela = 10
+        self._tamJanela = 20
         self._tempo = [-0.01*i for i in range(0,100*self._tamJanela + 1)]
 
     
@@ -51,7 +51,10 @@ class plotTempoReal():
         """
         self._corrente = corrente
         self._velocidade = velocidade
-        dados = ser.read(ser.inWaiting()).decode('utf-8')
+        try:
+            dados = ser.read(ser.inWaiting()).decode('utf-8')
+        except:
+            print("Erro ao decodificar os dados!")
         if dados != "":
             try:
                 dados = dados.split('\r\n')

@@ -39,10 +39,13 @@ void setup() {
   digitalWrite(sentidoMotor2, HIGH);
 
   // Inicializa o sensor INA219
-  if (! ina219_0.begin()) {
+  while (1){
+    if(ina219_0.begin()){
+      break;
+    }
     Serial.println("Falha ao encontrar o INA219");
-    while (1) { delay(10); }
-  } 
+    delay(20);
+  }
   ina219_0.setCalibration_16V_400mA();
 
   // Inicializa o PWM do motor com D = 0.6
@@ -60,13 +63,9 @@ void setup() {
 void loop() {
   float corrente = 0, tempo = 0, correnteFiltrada = 0;
   contador++;
-  for(int i = 0; i < 5; i++){
-    corrente = corrente + ina219_0.getCurrent_mA();
-    tempo = tempo + millis();
-  }
-  tempo = tempo/5;
-  corrente = corrente/5;
 
+  tempo = millis();
+  corrente = ina219_0.getCurrent_mA();
 
   mediaMovel[(contador-1)%N] = corrente;
 
@@ -85,5 +84,5 @@ void loop() {
   Serial.print(tempo);
   Serial.print(";");
   Serial.println(correnteFiltrada);
-  delay(3);
+  delay(9);
 }
