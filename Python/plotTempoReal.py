@@ -5,13 +5,15 @@ class plotTempoReal():
     """
     Classe para realizar o plot em tempo real
     """
-    def __init__(self):
+    def __init__(self, **kwargs):
         """
         Construtor da classe plotTempoReal
         """
         print("Plot em tempo real inicializado")
-        self._tamJanela = 20
+        self._tamJanela = 10
         self._tempo = [0.01*i for i in range(0,100*self._tamJanela + 1)]
+        self._axs = kwargs.get('eixos')
+        self._fig = kwargs.get('figura')
 
     
     def plot(self, velocidade, corrente):
@@ -19,29 +21,39 @@ class plotTempoReal():
         Método que realiza o plot dos dados.
         :param tempo: lista com os valores de tempo
         :param corrente: lista com os valores de corrente
-        """
-        plt.cla()
+        """        
+        self._axs[0].cla()
+        self._axs[1].cla()
         if len(corrente) < len(self._tempo):
             try:
-                plt.plot(self._tempo[:len(corrente)], corrente, linewidth = 3, color = 'tab:blue', label = "Corrente")
-                plt.plot(self._tempo[:len(velocidade)], velocidade, linewidth = 3, color = 'tab:orange', label = "Corrente") 
+                self._axs[0].plot(self._tempo[:len(corrente)], corrente, linewidth = 3, color = 'tab:blue', label = "Corrente")
+                self._axs[1].plot(self._tempo[:len(velocidade)], velocidade, linewidth = 3, color = 'tab:orange', label = "Velocidade")
             except:
                 print("Erro ao tentar realizar o plot com dados incompletos!")
         else:
             try:
-                plt.plot(self._tempo, corrente, linewidth = 3, color = 'tab:blue', label = "Corrente")
-                plt.plot(self._tempo, velocidade, linewidth = 3, color = 'tab:orange', label = "Corrente")
+                self._axs[0].plot(self._tempo, corrente, linewidth = 3, color = 'tab:blue', label = "Corrente")
+                self._axs[1].plot(self._tempo, velocidade, linewidth = 3, color = 'tab:orange', label = "Velocidade")
             except:
                 print("Erro ao tentar realizar o plot com dados completos!")
-        try:            
-            plt.xlim([0, self._tamJanela])
-            plt.xticks([i for i in range(1, self._tamJanela)])            
-            plt.xlabel("Tempo [ms]")
-            plt.ylabel("Corrente [mA]")
-            plt.legend(loc='upper right', fontsize = 20)
-            plt.tight_layout()
+
+        try:
+            self._axs[0].set_xlim(0, self._tamJanela)
+            self._axs[1].set_xlim(0, self._tamJanela)
+            self._axs[0].set_xticks([i for i in range(0, self._tamJanela+1)]) 
+            self._axs[1].set_xticks([i for i in range(0, self._tamJanela+1)])            
+            self._axs[0].set_xlabel("Tempo [s]") 
+            self._axs[1].set_xlabel("Tempos [s]")
+            self._axs[0].set_ylabel("Corrente [mA]")
+            self._axs[1].set_ylabel("Velocidade [rad/s]")
+            self._axs[0].legend(loc='upper left', fontsize = 20)
+            self._axs[1].legend(loc='upper left', fontsize = 20)
+            self._axs[0].grid()
+            self._axs[1].grid()
+            self._fig.tight_layout()
         except:
             print("Erro ao tentar traçar o grafico!")
+
         
     def trataDados(self, ser, velocidade, corrente):
         """
