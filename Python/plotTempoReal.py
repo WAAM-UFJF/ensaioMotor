@@ -14,7 +14,7 @@ class plotTempoReal():
         self._tempo = [0.01*i for i in range(0,100*self._tamJanela + 1)]
 
     
-    def plot(self, tempo, corrente):
+    def plot(self, velocidade, corrente):
         """
         Método que realiza o plot dos dados.
         :param tempo: lista com os valores de tempo
@@ -24,11 +24,13 @@ class plotTempoReal():
         if len(corrente) < len(self._tempo):
             try:
                 plt.plot(self._tempo[:len(corrente)], corrente, linewidth = 3, color = 'tab:blue', label = "Corrente")
+                plt.plot(self._tempo[:len(velocidade)], velocidade, linewidth = 3, color = 'tab:orange', label = "Corrente") 
             except:
                 print("Erro ao tentar realizar o plot com dados incompletos!")
         else:
             try:
                 plt.plot(self._tempo, corrente, linewidth = 3, color = 'tab:blue', label = "Corrente")
+                plt.plot(self._tempo, velocidade, linewidth = 3, color = 'tab:orange', label = "Corrente")
             except:
                 print("Erro ao tentar realizar o plot com dados completos!")
         try:            
