@@ -18,6 +18,7 @@
 const int sentidoMotor1 = 2;  // Porta para definir o sentido de rotação 1.
 const int sentidoMotor2 = 0;  // Porta para definir o sentido de rotação 2.
 
+static int tempo_atual = 0, tempo_passado = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -44,12 +45,16 @@ void setup() {
 
 
 void loop() {
-
+  tempo_passado = tempo_atual;
   // Faz a medição de velocidade
   measureVelocity();
   
   // Faz a medição de corrente com filtro de media movel
   measureCurrent();
-    
+  tempo_atual = millis();
+
+  // Serial.println(tempo_atual - tempo_passado);
+
   delay(9);
+  
 }

@@ -35,12 +35,9 @@ if("-m" in sys.argv or "--monitor" in sys.argv):
 else:
 	monitor= False
 
-# plt.figure(figsize = (1920/96, 1080/96))
-# plt.xlabel("Tempo [ms]")
-# plt.ylabel("Corrente [mA]")
-# plt.style.use('fivethirtyeight')
+
 fig, axs = plt.subplots(2, figsize = (2560/96, 1080/96))
-fig.suptitle("Valores do motor")
+fig.suptitle("Valores do motor", fontsize = 24)
 graph = plotTempoReal(figura = fig, eixos = axs)
 ani = FuncAnimation(plt.gcf(), animate, interval = 200)
 plt.show()
