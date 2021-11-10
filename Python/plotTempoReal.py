@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 from math import ceil
 import pandas as pd
+from plotly import graph_objects as go
+from plotly.subplots import make_subplots
 
 
 class plotTempoReal():
@@ -18,6 +20,18 @@ class plotTempoReal():
         self._tempo = [self._tempoAmostrado*i for i in range(0,int((1/self._tempoAmostrado)*self._tamJanela + 1))]        
         self._axs = kwargs.get('eixos')
         self._fig = kwargs.get('figura')
+
+
+    def _analiseDados(self):
+        """
+        Método para plotar o momento de mudança no degrau em tempo real.
+        """
+        dados = pd.read_csv("Python\\Dados\\dados.csv", sep=";")
+        grafico = make_subplots(rows = 3, cols = 1)
+        grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Degrau"], name = 'Degrau'), row = 1, col = 1)
+        grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Corrente"], name = 'Corrente'), row = 2, col = 1)
+        grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Velocidade"], name = 'Velocidade'), row = 3, col = 1)
+        grafico.show()
 
     
     def plot(self, velocidade, corrente):
@@ -44,6 +58,8 @@ class plotTempoReal():
         try:
             self._axs[0].set_xlim(0, self._tamJanela)
             self._axs[1].set_xlim(0, self._tamJanela)
+            self._axs[0].set_ylim(0, 50)
+            # self._axs[1].set_ylim(0, 120)
             self._axs[0].set_xticks([i for i in range(0, self._tamJanela+1)]) 
             self._axs[1].set_xticks([i for i in range(0, self._tamJanela+1)])            
             self._axs[0].set_xlabel("Tempo [s]", fontsize = 16) 
@@ -91,7 +107,8 @@ class plotTempoReal():
                             if self._degrau[int(ceil(len(self._degrau)/2))] == 0 and self._degrau[int(ceil(len(self._degrau)/2) + 1)] == 1:
                                 arquivos = {'Tempo' : self._tempo, 'Corrente' : self._corrente, 'Velocidade' : self._velocidade, 'Degrau' : self._degrau}
                                 df = pd.DataFrame(data = arquivos)
-                                df.to_csv('Python\\Dados\\dados.csv', sep=";", index = False)                                
+                                df.to_csv('Python\\Dados\\dados.csv', sep=";", index = False)    
+                                self._analiseDados()                            
                     except:
                         print("Falha ao separar dados!")
                         print(f'Dados recebidos: {dados}')                    
@@ -99,6 +116,6 @@ class plotTempoReal():
                     print("Erro ao tentar receber dados!")
         except:
             print("Erro ao decodificar os dados!")
-        
-
         return self._velocidade, self._corrente, self._degrau    
+
+

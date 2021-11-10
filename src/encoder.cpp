@@ -33,7 +33,7 @@ void calculapulso()
   else  duracao--;
 
   pulso++;
-  if(pulso > 200){
+  if(pulso > 100){
     tempo_passado = tempo_atual;
     tempo_atual = millis();
     deltaT = tempo_atual - tempo_passado;

@@ -6,7 +6,7 @@ float w;
 extern int deltaT;
 
 void measureVelocity(){
-    w = 1000.0*phi/deltaT;
+    w = 1000.0*phi/(2*deltaT);
     Serial.print(w);
     Serial.print(";");
 }
