@@ -44,5 +44,6 @@ void measureCurrent(){
         }
         correnteFiltrada = correnteFiltrada*n;    
     }
-    Serial.println(correnteFiltrada);
+    Serial.print(correnteFiltrada);
+    Serial.print(";");
 }

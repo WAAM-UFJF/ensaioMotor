@@ -9,8 +9,11 @@ const int freq = 5000;        // Define a frequencia a ser utilizada
 const int motorChannel = 0;
 int resolution = 8;           // Define a resolução que será utilizada no PWM.
 
+int degrau = 0;
+
 void alteraPWM(){
     ledcWrite(motorChannel, 180);
+    degrau =1;
 }
 
 void verificaPWM()

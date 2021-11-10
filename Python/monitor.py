@@ -14,9 +14,11 @@ def animate(i):
         a[0] = 1
         global velocidade
         global corrente
+        global degrau
         velocidade = []
         corrente = []
-    velocidade, corrente = graph.trataDados(ser, velocidade, corrente)
+        degrau = []
+    velocidade, corrente, degrau = graph.trataDados(ser, velocidade, corrente, degrau)
     graph.plot(velocidade,corrente)
       
 

@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+from math import ceil
+import pandas as pd
 
 
 class plotTempoReal():
@@ -11,7 +13,9 @@ class plotTempoReal():
         """
         print("Plot em tempo real inicializado")
         self._tamJanela = 10
-        self._tempo = [0.01*i for i in range(0,100*self._tamJanela + 1)]
+        self._tempoAmostrado = 0.001
+        print((1/self._tempoAmostrado)*self._tamJanela + 1)
+        self._tempo = [self._tempoAmostrado*i for i in range(0,int((1/self._tempoAmostrado)*self._tamJanela + 1))]        
         self._axs = kwargs.get('eixos')
         self._fig = kwargs.get('figura')
 
@@ -57,7 +61,7 @@ class plotTempoReal():
             print("Erro ao tentar traçar o grafico!")
 
         
-    def trataDados(self, ser, velocidade, corrente):
+    def trataDados(self, ser, velocidade, corrente, degrau):
         """
         Método que reliza o recebimento e tratamento dos dados
         :param ser: variavel de conexão, do tipo serial.serial
@@ -66,6 +70,7 @@ class plotTempoReal():
         """
         self._corrente = corrente
         self._velocidade = velocidade
+        self._degrau = degrau
         try:
             dados = ser.read(ser.inWaiting()).decode('utf-8')
             if dados != "":
@@ -75,12 +80,18 @@ class plotTempoReal():
                     dados.pop(0)
                     try:
                         for data in dados:
-                            self._velocidadeAux, self._correnteAux = data.split(';')
+                            self._velocidadeAux, self._correnteAux, self._degrauAux = data.split(';')
                             self._corrente.append(float(self._correnteAux))
                             self._velocidade.append(float(self._velocidadeAux))
+                            self._degrau.append(int(self._degrauAux))
                             if len(self._velocidade) > len(self._tempo):
                                 self._corrente.pop(0)
                                 self._velocidade.pop(0)
+                                self._degrau.pop(0)
+                            if self._degrau[int(ceil(len(self._degrau)/2))] == 0 and self._degrau[int(ceil(len(self._degrau)/2) + 1)] == 1:
+                                arquivos = {'Tempo' : self._tempo, 'Corrente' : self._corrente, 'Velocidade' : self._velocidade, 'Degrau' : self._degrau}
+                                df = pd.DataFrame(data = arquivos)
+                                df.to_csv('Python\\Dados\\dados.csv', sep=";", index = False)                                
                     except:
                         print("Falha ao separar dados!")
                         print(f'Dados recebidos: {dados}')                    
@@ -90,8 +101,4 @@ class plotTempoReal():
             print("Erro ao decodificar os dados!")
         
 
-        return self._velocidade, self._corrente
-
-    
-
-    
+        return self._velocidade, self._corrente, self._degrau    
