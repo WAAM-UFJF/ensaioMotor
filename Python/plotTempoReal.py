@@ -5,6 +5,8 @@ from plotly import graph_objects as go
 from plotly.subplots import make_subplots
 
 
+    
+
 class plotTempoReal():
     """
     Classe para realizar o plot em tempo real
@@ -119,3 +121,6 @@ class plotTempoReal():
         return self._velocidade, self._corrente, self._degrau    
 
 
+if __name__ == '__main__':
+    dados = plotTempoReal()
+    dados._analiseDados()
