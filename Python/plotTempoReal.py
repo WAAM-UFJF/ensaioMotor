@@ -3,6 +3,7 @@ from math import ceil
 import pandas as pd
 from plotly import graph_objects as go
 from plotly.subplots import make_subplots
+from datetime import datetime
 
 
     
@@ -22,13 +23,15 @@ class plotTempoReal():
         self._tempo = [self._tempoAmostrado*i for i in range(0,int((1/self._tempoAmostrado)*self._tamJanela + 1))]        
         self._axs = kwargs.get('eixos')
         self._fig = kwargs.get('figura')
+        self._now = datetime.now()
+        self._arquivoNome = ''
 
 
-    def _analiseDados(self):
+    def _analiseDados(self, nomeArquivo):
         """
         Método para plotar o momento de mudança no degrau em tempo real.
         """
-        dados = pd.read_csv("Python\\Dados\\dados.csv", sep=";")
+        dados = pd.read_csv(f"Python\\Dados\\{nomeArquivo}.csv", sep=";")
         grafico = make_subplots(rows = 3, cols = 1)
         grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Degrau"], name = 'Degrau'), row = 1, col = 1)
         grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Corrente"], name = 'Corrente'), row = 2, col = 1)
@@ -109,8 +112,9 @@ class plotTempoReal():
                             if self._degrau[int(ceil(len(self._degrau)/2))] == 0 and self._degrau[int(ceil(len(self._degrau)/2) + 1)] == 1:
                                 arquivos = {'Tempo' : self._tempo, 'Corrente' : self._corrente, 'Velocidade' : self._velocidade, 'Degrau' : self._degrau}
                                 df = pd.DataFrame(data = arquivos)
-                                df.to_csv('Python\\Dados\\dados.csv', sep=";", index = False)    
-                                self._analiseDados()                            
+                                self._arquivoNome = self._now.strftime('%b-%d-%Y--%H-%M-%S')
+                                df.to_csv(f"Python\\Dados\\{self._arquivoNome}.csv", sep=";", index = False)    
+                                self._analiseDados(self._arquivoNome)                            
                     except:
                         print("Falha ao separar dados!")
                         print(f'Dados recebidos: {dados}')                    
@@ -123,4 +127,4 @@ class plotTempoReal():
 
 if __name__ == '__main__':
     dados = plotTempoReal()
-    dados._analiseDados()
+    dados._analiseDados('dados')
