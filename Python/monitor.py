@@ -38,8 +38,10 @@ else:
 	monitor= False
 
 
-fig, axs = plt.subplots(2, figsize = (2560/96, 1080/96))
-fig.suptitle("Oscilografia do motor", fontsize = 24)
+#fig, axs = plt.subplots(2, figsize = (2560/96, 1080/96))
+# fig.suptitle("Oscilografia do motor", fontsize = 24)
+fig, axs = plt.subplots(2, figsize = (24 /2.54 , 18/2.54)) # Comentar aqui
+fig.suptitle("Oscilografia do motor")
 graph = plotTempoReal(figura = fig, eixos = axs)
 ani = FuncAnimation(plt.gcf(), animate, interval = 200)
 plt.show()
