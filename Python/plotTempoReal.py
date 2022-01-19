@@ -38,6 +38,7 @@ class plotTempoReal():
         grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Degrau"], name = 'Degrau'), row = 1, col = 1)
         grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Corrente"], name = 'Corrente'), row = 2, col = 1)
         grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Velocidade"], name = 'Velocidade'), row = 3, col = 1)
+        grafico.update_xaxes(range = [4,6])
         grafico.show()
         io.write_image(grafico, 'Python\\Dados\\analiseDegrau.pdf', format = 'pdf')
 
