@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from math import ceil
 import pandas as pd
+from plotly import io
 from plotly import graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import datetime
@@ -33,10 +34,13 @@ class plotTempoReal():
         """
         dados = pd.read_csv(f"Python\\Dados\\{nomeArquivo}.csv", sep=";")
         grafico = make_subplots(rows = 3, cols = 1)
+        grafico.update_layout(height=720, width=960, title_text="Análise de Dados")
         grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Degrau"], name = 'Degrau'), row = 1, col = 1)
         grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Corrente"], name = 'Corrente'), row = 2, col = 1)
         grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Velocidade"], name = 'Velocidade'), row = 3, col = 1)
         grafico.show()
+        io.write_image(grafico, 'Python\\Dados\\analiseDegrau.pdf', format = 'pdf')
+
 
     
     def plot(self, velocidade, corrente):

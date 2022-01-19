@@ -64,7 +64,7 @@ class identificaParametros():
         plt.ylabel('Velocidade [rad/s]')
         # plt.xticks(fontsize = 14)
         # plt.yticks(fontsize = 14)
-        plt.title('Modelagem do motor em segunda ordem')
+        plt.title('Modelagem de segunda ordem')
 
         plt.subplot(2,1, 2)
         tensao_inicial = 11.04*(154/255) * np.ones(5001)
@@ -77,7 +77,7 @@ class identificaParametros():
         plt.legend(loc = 'upper left')
         plt.grid()
 
-        plt.savefig('Python\\Dados\\teste.pdf', bbox_inches = 'tight')
+        plt.savefig('Python\\Dados\\modelagem2ordem.pdf', bbox_inches = 'tight')
         plt.show()
 
 
