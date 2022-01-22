@@ -60,7 +60,7 @@ class identificaParametros():
         plt.plot(t_teste,valor_inicial + yout_teste, color = 'tab:orange', label = 'Identificado')
         plt.grid()
         plt.legend(loc = 'upper left')
-        plt.xlim([0, 10])
+        plt.xlim([4, 6])
         plt.ylabel('Velocidade [rad/s]')
         # plt.xticks(fontsize = 14)
         # plt.yticks(fontsize = 14)
@@ -71,7 +71,7 @@ class identificaParametros():
         tensao_final = 11.04*(180/255) * np.ones(5000)
         tensao = [*tensao_inicial, *tensao_final]
         plt.plot(data['Tempo'], tensao, color = 'tab:green', label = 'Tensão de Entrada')
-        plt.xlim([0, 10])
+        plt.xlim([4, 6])
         plt.xlabel('Tempo [s]')
         plt.ylabel('Tensão [V]')
         plt.legend(loc = 'upper left')
@@ -79,6 +79,8 @@ class identificaParametros():
 
         plt.savefig('Python\\Dados\\modelagem2ordem.pdf', bbox_inches = 'tight')
         plt.show()
+
+        print(G_teste)
 
 
 
