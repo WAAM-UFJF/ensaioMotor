@@ -40,8 +40,10 @@ class identificaParametros():
         print(Wn)
 
 
-        t_aux = [0, 5]
-        v_aux = [0, 0]
+        # t_aux = [0, 5]
+        # v_aux = [0, 0]
+        t_aux = np.linspace(0,5,5001)
+        v_aux = 0*np.linspace(0,5,5001)
         u = (11.04*(180/255) - 11.04*(154/255)) * np.ones(5000)
         fig_width_cm = 24
         fig_height_cm = 18
@@ -70,10 +72,10 @@ class identificaParametros():
         tensao_inicial = 11.04*(154/255) * np.ones(5001)
         tensao_final = 11.04*(180/255) * np.ones(5000)
         tensao = [*tensao_inicial, *tensao_final]
-        plt.plot(data['Tempo'], tensao, color = 'tab:green', label = 'Tensão de Entrada')
+        plt.plot(data['Tempo'], abs(data['Velocidade'] - (valor_inicial+yout_teste))/data['Velocidade']*100, color = 'tab:green', label = 'Erro relativo')
         plt.xlim([4, 6])
         plt.xlabel('Tempo [s]')
-        plt.ylabel('Tensão [V]')
+        plt.ylabel('Erro [%]')
         plt.legend(loc = 'upper left')
         plt.grid()
 
