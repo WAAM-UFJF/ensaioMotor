@@ -5,6 +5,7 @@ from plotly import io
 from plotly import graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import datetime
+from identificaParametros import identificaParametros
 
 
     
@@ -40,7 +41,8 @@ class plotTempoReal():
         grafico.add_trace(go.Scatter(x = dados["Tempo"], y = dados["Velocidade"], name = 'Velocidade'), row = 3, col = 1)
         grafico.update_xaxes(range = [4,6])
         grafico.show()
-        io.write_image(grafico, 'Python\\Dados\\analiseDegrau.pdf', format = 'pdf')
+        io.write_image(grafico, 'Python\\Dados\\Figuras\\analiseDegrau.pdf', format = 'pdf')
+        identificaParametros(nomeArquivo)
 
 
     
@@ -72,14 +74,14 @@ class plotTempoReal():
             self._axs[1].set_ylim(60, 120) # Comentar aqui
             self._axs[0].set_xticks([i for i in range(0, self._tamJanela+1)]) 
             self._axs[1].set_xticks([i for i in range(0, self._tamJanela+1)])            
-            # self._axs[0].set_xlabel("Tempo [s]", fontsize = 16) 
-            # self._axs[1].set_xlabel("Tempos [s]", fontsize = 16)
-            # self._axs[0].set_ylabel("Corrente [mA]", fontsize = 16)
-            # self._axs[1].set_ylabel("Velocidade [rad/s]", fontsize = 16)
-            # self._axs[0].legend(loc='upper left', fontsize = 16)
-            # self._axs[1].legend(loc='upper left', fontsize = 16)
-            # self._axs[0].tick_params(axis='both', which='major', labelsize=14)
-            # self._axs[1].tick_params(axis='both', which='major', labelsize=14)
+            self._axs[0].set_xlabel("Tempo [s]", fontsize = 16) 
+            self._axs[1].set_xlabel("Tempos [s]", fontsize = 16)
+            self._axs[0].set_ylabel("Corrente [mA]", fontsize = 16)
+            self._axs[1].set_ylabel("Velocidade [rad/s]", fontsize = 16)
+            self._axs[0].legend(loc='upper left', fontsize = 16)
+            self._axs[1].legend(loc='upper left', fontsize = 16)
+            self._axs[0].tick_params(axis='both', which='major', labelsize=14)
+            self._axs[1].tick_params(axis='both', which='major', labelsize=14)
             self._axs[0].set_xlabel("Tempo [s]") 
             self._axs[1].set_xlabel("Tempos [s]")
             self._axs[0].set_ylabel("Corrente [mA]")
