@@ -14,9 +14,11 @@ def animate(i):
         a[0] = 1
         global velocidade
         global corrente
+        global degrau
         velocidade = []
         corrente = []
-    velocidade, corrente = graph.trataDados(ser, velocidade, corrente)
+        degrau = []
+    velocidade, corrente, degrau = graph.trataDados(ser, velocidade, corrente, degrau)
     graph.plot(velocidade,corrente)
       
 
@@ -35,10 +37,11 @@ if("-m" in sys.argv or "--monitor" in sys.argv):
 else:
 	monitor= False
 
-plt.figure(figsize = (1920/96, 1080/96))
-plt.xlabel("Tempo [ms]")
-plt.ylabel("Corrente [mA]")
-plt.style.use('fivethirtyeight')
-graph = plotTempoReal()
+
+#fig, axs = plt.subplots(2, figsize = (2560/96, 1080/96))
+# fig.suptitle("Oscilografia do motor", fontsize = 24)
+fig, axs = plt.subplots(2, figsize = (24 /2.54 , 18/2.54)) # Comentar aqui
+fig.suptitle("Oscilografia do motor")
+graph = plotTempoReal(figura = fig, eixos = axs)
 ani = FuncAnimation(plt.gcf(), animate, interval = 200)
 plt.show()

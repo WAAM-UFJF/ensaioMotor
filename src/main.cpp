@@ -1,10 +1,14 @@
+// Bibliotecas
 #include <Arduino.h>
-#include <encoder.h>
-#include <confpwm.h>
 #include <Wire.h> 
 #include <Adafruit_INA219.h>
 #include <time.h>
-#include <ArduinoJson.h>
+
+// Arquivos
+#include <encoder.h>
+#include <confpwm.h>
+#include <measurecurrent.h>
+#include <measurevelocity.h>
 
 #define SDA 21
 #define SCL 22
@@ -14,20 +18,9 @@
 const int sentidoMotor1 = 2;  // Porta para definir o sentido de rotação 1.
 const int sentidoMotor2 = 0;  // Porta para definir o sentido de rotação 2.
 
+static int tempo_atual = 0, tempo_passado = 0;
 
-
-
-// Definição do sensor de corrente e tensão.
-Adafruit_INA219 ina219_0 (0x40);
-
-// Definições JSON
-DynamicJsonDocument doc(32);
-
-// Define o valor de amostras para a media movel
-int N = 128;
-float n = 1.0/N;
-float mediaMovel[128];
-int contador=0;
+extern int degrau;
 
 void setup() {
   Serial.begin(115200);
@@ -39,14 +32,7 @@ void setup() {
   digitalWrite(sentidoMotor2, HIGH);
 
   // Inicializa o sensor INA219
-  while (1){
-    if(ina219_0.begin()){
-      break;
-    }
-    Serial.println("Falha ao encontrar o INA219");
-    delay(20);
-  }
-  ina219_0.setCalibration_16V_400mA();
+  inicializaINA();
 
   // Inicializa o PWM do motor com D = 0.6
   inicializaPWM();
@@ -61,28 +47,16 @@ void setup() {
 
 
 void loop() {
-  float corrente = 0, tempo = 0, correnteFiltrada = 0;
-  contador++;
+  tempo_passado = tempo_atual;
+  // Faz a medição de velocidade
+  measureVelocity();
+  
+  // Faz a medição de corrente com filtro de media movel
+  measureCurrent();
 
-  tempo = millis();
-  corrente = ina219_0.getCurrent_mA();
+  Serial.println(degrau);
+  tempo_atual = millis();
 
-  mediaMovel[(contador-1)%N] = corrente;
+  // Serial.println(tempo_atual - tempo_passado);
 
-  if(contador < N){
-    for(int i=0; i<contador+1;i++){
-      correnteFiltrada += mediaMovel[i];
-    }
-    correnteFiltrada = correnteFiltrada/contador;
-  }
-  else{
-    for(int i=0; i<N; i++){
-      correnteFiltrada += mediaMovel[i];
-    }
-    correnteFiltrada = correnteFiltrada*n;    
-  }
-  Serial.print(tempo);
-  Serial.print(";");
-  Serial.println(correnteFiltrada);
-  delay(9);
 }
