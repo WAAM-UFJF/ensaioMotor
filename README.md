@@ -49,6 +49,15 @@ Para realizar a aquisição de dados, é necessario a montagem de um circuito si
 
 <div style="text-align: justify"> No microcontrolador é ajustada uma variação da razão cíclica. Neste, a razão cíclica permanece em 0,6 até que seja acionado o push-button, em que a razão cíclica é aumentada para 0,7. Essa razão cíclica (sinal PWM) é aplicada no conversor CC-CC (LM298M), que aciona o motor CC. Um conversor A/D do ESP32 discretiza a medida efetuada pelo transdutor de corrente enquanto que a velocidade é obtida diretamente a partir de interrupções causadas pela variação do sinal digital proveniente do encoder. </div>
 
+
+É enviado ao computador os dados de velocidade, corrente e degrau através do cabo usb (comunicação serial) da seguinte forma:
+
+<p align="center">
+ velocidade;corrente;degrau
+ </p>
+
+
+
 # Instalação
 Ao realizar o download do projeto, é necessário instalar o ambiente virtual e todos os pacotes utilizados no projeto. Para isso, basta executar no terminal os seguintes comandos:
 
@@ -56,3 +65,7 @@ Ao realizar o download do projeto, é necessário instalar o ambiente virtual e 
 2. python -m virtualenv .env
 3. .env\Scripts\Activate
 4. pip install -r requirements.txt
+
+Após isso, é preciso executar o arquivo **monitor.py**
+
+
