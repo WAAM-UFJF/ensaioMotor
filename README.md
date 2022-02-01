@@ -13,13 +13,11 @@
 ## Aquisição de Dados
 No software são demonstradas as curvas de aquisição de dados, em tempo real. Os gráficos de corrente e velocidade de rotação do motor em regime permanente são mostrados abaixo.
 
-FIGURA
+![Aquisição de dados em tempo real](figuras/supervisorio.png?style=center)
 
 ## Análise de Dados
 
 É oferecido ao usuário um gráfico detalhado, podendo ser analisado ponto a ponto paramelhor compreensão do ensaio realizado. Esse gráfico é feito utilizando a biblioteca plotly, e fornece uma ferramenta interessante para a análise do transitório.
-
-FIGURA
 
 ## Arquivo de Dados
 
@@ -35,13 +33,16 @@ Com a identificação dos parametros, é possivel montar a função de transfere
 
 A análise de erro é feita a partir do erro relativo entre o ensaio e o gráfico com os parametros identificados. As figuras abaixo apresentam o erro para o modelo de primeira e segunda ordem.
 
+Primeira Ordem           |  Segunda Ordem
+:-------------------------:|:-------------------------:
+![](figuras/modelagem1ordemDetalhado.png)  |  ![](figuras/modelagem2ordemDetalhado.png)
 
 
 # Circuito para Aquisição
 
 Para realizar a aquisição de dados, é necessario a montagem de um circuito similar ao demonstrado na imagem.
 
-![Circuito de aquisição de dados](Montagem.png?style=center)
+![Circuito de aquisição de dados](figuras/Montagem.png?style=center)
 
 
 
