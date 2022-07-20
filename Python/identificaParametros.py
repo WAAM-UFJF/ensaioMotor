@@ -11,13 +11,13 @@ class identificaParametros():
     def __init__(self, dados):
         self._t_aux = np.linspace(0,5,5001)
         self._v_aux = 0*np.linspace(0,5,5001)
-        self._u = (11.04*(180/255) - 11.04*(154/255)) * np.ones(5000)
+        self._u = (180 - 154) * np.ones(5000)
         self._fig_width_cm = 24
         self._fig_height_cm = 18
         self._data = pd.read_csv(f'Python\\Dados\\{dados}.csv', sep=';')
         self._valor_inicial = sum(self._data['Velocidade'][:int(len(self._data['Velocidade'])/2)])/len(self._data['Velocidade'][:int(len(self._data['Velocidade'])/2)])
         self._valor_final = sum(self._data['Velocidade'][int(4*len(self._data['Velocidade'])/5):])/len(self._data['Velocidade'][int(4*len(self._data['Velocidade'])/5):])
-        self._K = (self._valor_final - self._valor_inicial)/(11.04*(180/255) - 11.04*(154/255))
+        self._K = (self._valor_final - self._valor_inicial)/(180 - 154)
         self._calculaTempoAcomodacao()
         self._primeiraOrdem()
         self._segundaOrdem()
@@ -51,13 +51,13 @@ class identificaParametros():
         plt.title('Modelagem de primeira ordem')
 
         plt.subplot(2,1, 2)
-        tensao_inicial = 11.04*(154/255) * np.ones(5001)
-        tensao_final = 11.04*(180/255) * np.ones(5000)
+        tensao_inicial = 154 * np.ones(5001)
+        tensao_final = 180 * np.ones(5000)
         self._tensao1 = [*tensao_inicial, *tensao_final]
-        plt.plot(self._data['Tempo'], self._tensao1 , color = 'tab:green', label = 'Erro relativo')
+        plt.plot(self._data['Tempo'], self._tensao1 , color = 'tab:green', label = 'Razão Cíclica')
         plt.xlim([0, 10])
         plt.xlabel('Tempo [s]')
-        plt.ylabel('Erro [%]')
+        plt.ylabel('Razão Cíclica [0-255]')
         plt.legend(loc = 'upper left')
         plt.grid()
         plt.savefig('Python\\Dados\\Figuras\\modelagem1ordem.pdf', bbox_inches = 'tight')
@@ -121,13 +121,13 @@ class identificaParametros():
         plt.title('Modelagem de segunda ordem')
 
         plt.subplot(2,1, 2)
-        self._tensao_inicial = 11.04*(154/255) * np.ones(5001)
-        self._tensao_final = 11.04*(180/255) * np.ones(5000)
+        self._tensao_inicial = 154 * np.ones(5001)
+        self._tensao_final = 180 * np.ones(5000)
         self._tensao = [*self._tensao_inicial, *self._tensao_final]
-        plt.plot(self._data['Tempo'], self._tensao, color = 'tab:green', label = 'Erro relativo')
+        plt.plot(self._data['Tempo'], self._tensao, color = 'tab:green', label = 'Razão Cíclica')
         plt.xlim([0, 10])
         plt.xlabel('Tempo [s]')
-        plt.ylabel('Erro [%]')
+        plt.ylabel('Razão Cíclica [0-255]')
         plt.legend(loc = 'upper left')
         plt.grid()
 
@@ -177,3 +177,4 @@ class identificaParametros():
 if __name__ == '__main__':
     data = 'Jan-15-2022--19-17-53'
     teste = identificaParametros(data)
+    plt.show()
