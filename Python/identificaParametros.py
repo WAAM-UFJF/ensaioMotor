@@ -177,4 +177,3 @@ class identificaParametros():
 if __name__ == '__main__':
     data = 'Jan-15-2022--19-17-53'
     teste = identificaParametros(data)
-    plt.show()
